@@ -27,7 +27,7 @@ depends=(
 #	xorg-server-xwayland
 	seatd
 	polkit
-#	voidbr-umbriel-config
+	voidbr-umbriel-config
 )
 
 package() {
