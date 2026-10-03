@@ -27,6 +27,8 @@ depends=(
 #	xorg-server-xwayland
 	seatd
 	polkit
+    wlroots
+    tomlplusplus
 	voidbr-umbriel-config
 )
 
