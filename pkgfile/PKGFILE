@@ -19,16 +19,16 @@ depends=(
 	voidbr-gui-common
 	umbriel
 	noctalia
-	noctalia-qs
 	xdg-desktop-portal-umbriel
-#	xdg-desktop-portal
-# pipewire
-# wireplumbler
-#	xorg-server-xwayland
+	# noctalia-qs
+	# xdg-desktop-portal
+	# pipewire
+	# wireplumbler
+	# xorg-server-xwayland
 	seatd
 	polkit
-    wlroots
-    tomlplusplus
+	wlroots
+	tomlplusplus
 	voidbr-umbriel-config
 )
 
