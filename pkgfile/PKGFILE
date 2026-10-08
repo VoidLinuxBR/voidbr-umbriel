@@ -14,22 +14,89 @@ source=("git+${url}.git")
 md5sums=('SKIP')
 makedepends=()
 depends=(
+	# --- Base do VoidBR ---
 	voidbr-base-common
-	voidbr-wayland-common
-	voidbr-gui-common
+	
+	# --- Core Umbriel e Noctalia ---
 	umbriel
 	noctalia
-	xdg-desktop-portal-umbriel
-	# noctalia-qs
-	# xdg-desktop-portal
-	# pipewire
-	# wireplumbler
-	# xorg-server-xwayland
-	seatd
-	polkit
+	noctalia-greeter
+	greetd
+	voidbr-umbriel-config
 	wlroots
 	tomlplusplus
-	voidbr-umbriel-config
+	matugen
+	
+	# --- Infraestrutura Wayland ---
+	qt5-wayland
+	qt6-wayland
+	qt5ct
+	qt6ct
+	xorg-server-xwayland
+	xhost
+	wl-clipboard
+	xdg-desktop-portal
+	xdg-desktop-portal-umbriel
+	xdg-desktop-portal-gtk
+	xdg-utils
+	xdg-user-dirs
+	wdisplays
+	wlr-randr
+	brightnessctl
+	jq
+	socat
+	dconf
+	glib-networking
+	xsettingsd
+	
+	# --- Audio Profissional (Pipewire) ---
+	pipewire
+	wireplumber
+	alsa-pipewire
+	rtkit
+	pavucontrol
+	
+	# --- Hardware, Discos e Sessão ---
+	elogind
+	polkit
+	polkit-elogind
+	mesa-dri
+	mesa
+	vulkan-loader
+	gvfs
+	gvfs-afc
+	gvfs-mtp
+	gvfs-smb
+	udisks2
+	NetworkManager
+	network-manager-applet
+	bluez
+	blueman
+	upower
+	
+	# --- Apps do Usuário ---
+	foot
+	firefox
+	firefox-i18n-pt-BR
+	Thunar
+	thunar-volman
+	thunar-archive-plugin
+	file-roller
+	gparted
+	io.elementary.calculator
+	ristretto
+	
+	# --- Mídia, Fontes e Arte ---
+	gdk-pixbuf
+	libavif
+	libheif
+	noto-fonts-ttf
+	noto-fonts-emoji
+	nerd-fonts-symbols-ttf
+	voidbr-beauty-icons
+	voidbr-wallpapers
+	voidbr-webapps
+	papirus-icon-theme
 )
 
 package() {
@@ -71,7 +138,9 @@ post_install() {
 	fi
 
 	log "Ativando serviços"
-	/usr/local/bin/vservice add sddm --quiet || true
+	/usr/local/bin/vservice add dbus --quiet || true
+	/usr/local/bin/vservice add elogind --quiet || true
+	/usr/local/bin/vservice add greetd --quiet || true
 
 	log "Finalizando instalação"
 	log "${YELLOW}Instalação completa. Reinicie o sistema...${RESET}"
@@ -82,5 +151,15 @@ pre_upgrade() {
 }
 
 post_upgrade() {
+	if [ -n "$user" ]; then
+		log "Aplicando configuracoes para $user"
+		/usr/local/bin/voidbr-copy-skel-inc --user "$user" --force --quiet || true
+	fi
+
+	log "Ativando serviços"
+	/usr/local/bin/vservice add dbus --quiet || true
+	/usr/local/bin/vservice add elogind --quiet || true
+	/usr/local/bin/vservice add greetd --quiet || true
+
 	log "Finalizando upgrade"
 }
