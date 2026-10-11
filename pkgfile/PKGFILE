@@ -63,6 +63,9 @@ depends=(
 	polkit-elogind
 	mesa-dri
 	mesa
+	mesa-vaapi
+	intel-media-driver
+	libva-intel-driver
 	vulkan-loader
 	gvfs
 	gvfs-afc
@@ -74,6 +77,7 @@ depends=(
 	bluez
 	blueman
 	upower
+	power-profiles-daemon
 
 	# --- Apps do Usuário ---
 	foot
@@ -81,13 +85,15 @@ depends=(
 	firefox-i18n-pt-BR
 	celluloid
 	amberol
+	loupe
+	zathura
+	zathura-pdf-mupdf
 	Thunar
 	thunar-volman
 	thunar-archive-plugin
 	file-roller
 	gparted
 	io.elementary.calculator
-	ristretto
 	mousepad
 	git
 
