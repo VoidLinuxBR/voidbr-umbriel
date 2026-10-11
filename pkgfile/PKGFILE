@@ -30,8 +30,6 @@ depends=(
 	# --- Infraestrutura Wayland ---
 	qt5-wayland
 	qt6-wayland
-	adwaita-qt5
-	adwaita-qt6
 	xorg-server-xwayland
 	xhost
 	wl-clipboard
@@ -97,7 +95,6 @@ depends=(
 	noto-fonts-emoji
 	nerd-fonts-symbols-ttf
 	dejavu-fonts-ttf
-	bibata-modern-ice
 	voidbr-beauty-icons
 	voidbr-wallpapers
 	voidbr-webapps
