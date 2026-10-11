@@ -16,7 +16,7 @@ makedepends=()
 depends=(
 	# --- Base do VoidBR ---
 	voidbr-base-common
-	
+
 	# --- Core Umbriel e Noctalia ---
 	umbriel
 	noctalia
@@ -26,7 +26,7 @@ depends=(
 	wlroots
 	tomlplusplus
 	matugen
-	
+
 	# --- Infraestrutura Wayland ---
 	qt5-wayland
 	qt6-wayland
@@ -48,14 +48,14 @@ depends=(
 	dconf
 	glib-networking
 	xsettingsd
-	
+
 	# --- Audio Profissional (Pipewire) ---
 	pipewire
 	wireplumber
 	alsa-pipewire
 	rtkit
 	pavucontrol
-	
+
 	# --- Hardware, Discos e Sessão ---
 	elogind
 	polkit
@@ -73,7 +73,7 @@ depends=(
 	bluez
 	blueman
 	upower
-	
+
 	# --- Apps do Usuário ---
 	foot
 	firefox
@@ -85,7 +85,7 @@ depends=(
 	gparted
 	io.elementary.calculator
 	ristretto
-	
+
 	# --- Mídia, Fontes e Arte ---
 	gdk-pixbuf
 	libavif
@@ -132,15 +132,28 @@ pre_install() {
 }
 
 post_install() {
+	if [ "${update:-}" = "yes" ]; then
+		log "Finalizando upgrade"
+	else
+		log "Finalizando instalação"
+	fi
+
+	if [ -n "${MKISO_BUILD:-}" ]; then
+		echo "${YELLOW}[-]${RESET} Build de ISO detectado (MKISO_BUILD) — pulando."
+		return 0
+	fi
+
 	if [ -n "$user" ]; then
 		log "Aplicando configuracoes para $user"
 		/usr/local/bin/voidbr-copy-skel-inc --user "$user" --force --quiet || true
 	fi
 
-	log "Ativando serviços"
-	/usr/local/bin/vservice add dbus --quiet || true
-	/usr/local/bin/vservice add elogind --quiet || true
-	/usr/local/bin/vservice add greetd --quiet || true
+	if [ -z "${VOIDBR_INSTALLER:-}" ]; then
+		log "Ativando serviços"
+		/usr/local/bin/vservice add dbus --quiet || true
+	    #/usr/local/bin/vservice add elogind --quiet || true
+		/usr/local/bin/vservice add greetd --quiet || true
+	fi
 
 	log "Finalizando instalação"
 	log "${YELLOW}Instalação completa. Reinicie o sistema...${RESET}"
@@ -151,15 +164,5 @@ pre_upgrade() {
 }
 
 post_upgrade() {
-	if [ -n "$user" ]; then
-		log "Aplicando configuracoes para $user"
-		/usr/local/bin/voidbr-copy-skel-inc --user "$user" --force --quiet || true
-	fi
-
-	log "Ativando serviços"
-	/usr/local/bin/vservice add dbus --quiet || true
-	/usr/local/bin/vservice add elogind --quiet || true
-	/usr/local/bin/vservice add greetd --quiet || true
-
-	log "Finalizando upgrade"
+	post_install
 }
