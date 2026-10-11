@@ -79,6 +79,8 @@ depends=(
 	foot
 	firefox
 	firefox-i18n-pt-BR
+	celluloid
+	amberol
 	Thunar
 	thunar-volman
 	thunar-archive-plugin
@@ -89,7 +91,13 @@ depends=(
 	mousepad
 	git
 
-	# --- Mídia, Fontes e Arte ---
+	# --- Mídia, Codecs, Fontes e Arte ---
+	ffmpeg
+	gst-libav
+	gst-plugins-base1
+	gst-plugins-good1
+	gst-plugins-bad1
+	gst-plugins-ugly1
 	gdk-pixbuf
 	libavif
 	libheif
