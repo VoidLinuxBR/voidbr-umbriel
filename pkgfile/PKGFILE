@@ -30,8 +30,8 @@ depends=(
 	# --- Infraestrutura Wayland ---
 	qt5-wayland
 	qt6-wayland
-	qt5ct
-	qt6ct
+	adwaita-qt5
+	adwaita-qt6
 	xorg-server-xwayland
 	xhost
 	wl-clipboard
@@ -43,6 +43,7 @@ depends=(
 	wdisplays
 	wlr-randr
 	brightnessctl
+	ddcutil
 	jq
 	socat
 	dconf
@@ -85,6 +86,8 @@ depends=(
 	gparted
 	io.elementary.calculator
 	ristretto
+	mousepad
+	git
 
 	# --- Mídia, Fontes e Arte ---
 	gdk-pixbuf
@@ -93,6 +96,8 @@ depends=(
 	noto-fonts-ttf
 	noto-fonts-emoji
 	nerd-fonts-symbols-ttf
+	dejavu-fonts-ttf
+	bibata-modern-ice
 	voidbr-beauty-icons
 	voidbr-wallpapers
 	voidbr-webapps
