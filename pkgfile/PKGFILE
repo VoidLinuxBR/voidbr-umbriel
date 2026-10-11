@@ -97,6 +97,7 @@ depends=(
 	noto-fonts-emoji
 	nerd-fonts-symbols-ttf
 	dejavu-fonts-ttf
+	bibata-modern-ice
 	voidbr-beauty-icons
 	voidbr-wallpapers
 	voidbr-webapps
