@@ -118,31 +118,30 @@ depends=(
 )
 
 package() {
-	# Verify default folder
-	if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-		InternalDir="${srcdir}/${pkgname}/${pkgname}"
-	else
-		InternalDir="${srcdir}/${pkgname}"
-	fi
+  # Verify default folder
+  if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
+    InternalDir="${srcdir}/${pkgname}/${pkgname}"
+  elif [ -d "${srcdir}/${pkgname}" ]; then
+    InternalDir="${srcdir}/${pkgname}"
+  else
+    #local
+    InternalDir="${WORKDIR}"
+  fi
 
-	cd "${srcdir}/${pkgname}"
-	# Copiar a estrutura de /etc, /usr e /opt para /
-	local dirs=("boot" "etc" "opt" "usr")
-	for dir in "${dirs[@]}"; do
-		if [ -d "${InternalDir}/${dir}" ]; then
-			cp -a "${InternalDir}/${dir}" "${pkgdir}/"
-		fi
-	done
+  cd "${InternalDir}"
+  # Copiar a estrutura de /etc, /usr e /opt para /
+  local dirs=("boot" "etc" "opt" "usr" "var")
+  for dir in "${dirs[@]}"; do
+    if [ -d "${InternalDir}/${dir}" ]; then
+      cp -a "${InternalDir}/${dir}" "${pkgdir}/"
+    fi
+  done
 
-	# Install license file if present
-	if [ -f "LICENSE" ]; then
-		install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-	fi
+  # Install license file if present
+  [ -f "LICENSE" ] && install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  # Install documentation if present
+  [ -f "README.md" ] && install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
 
-	# Install documentation if present
-	if [ -f "README.md" ]; then
-		install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
-	fi
 }
 
 pre_install() {
@@ -169,7 +168,7 @@ post_install() {
 	if [ -z "${VOIDBR_INSTALLER:-}" ]; then
 		log "Ativando serviços"
 		/usr/local/bin/vservice add dbus --quiet || true
-	    #/usr/local/bin/vservice add elogind --quiet || true
+   #/usr/local/bin/vservice add elogind --quiet || true
 		/usr/local/bin/vservice add greetd --quiet || true
 	fi
 
