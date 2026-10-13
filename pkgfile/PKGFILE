@@ -118,29 +118,29 @@ depends=(
 )
 
 package() {
-  # Verify default folder
-  if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-    InternalDir="${srcdir}/${pkgname}/${pkgname}"
-  elif [ -d "${srcdir}/${pkgname}" ]; then
-    InternalDir="${srcdir}/${pkgname}"
-  else
-    #local
-    InternalDir="${WORKDIR}"
-  fi
+	# Verify default folder
+	if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
+		InternalDir="${srcdir}/${pkgname}/${pkgname}"
+	elif [ -d "${srcdir}/${pkgname}" ]; then
+		InternalDir="${srcdir}/${pkgname}"
+	else
+		#local
+		InternalDir="${WORKDIR}"
+	fi
 
-  cd "${InternalDir}"
-  # Copiar a estrutura de /etc, /usr e /opt para /
-  local dirs=("boot" "etc" "opt" "usr" "var")
-  for dir in "${dirs[@]}"; do
-    if [ -d "${InternalDir}/${dir}" ]; then
-      cp -a "${InternalDir}/${dir}" "${pkgdir}/"
-    fi
-  done
+	cd "${InternalDir}"
+	# Copiar a estrutura de /etc, /usr e /opt para /
+	local dirs=("boot" "etc" "opt" "usr" "var")
+	for dir in "${dirs[@]}"; do
+		if [ -d "${InternalDir}/${dir}" ]; then
+			cp -a "${InternalDir}/${dir}" "${pkgdir}/"
+		fi
+	done
 
-  # Install license file if present
-  [ -f "LICENSE" ] && install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-  # Install documentation if present
-  [ -f "README.md" ] && install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+	# Install license file if present
+	[ -f "LICENSE" ] && install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	# Install documentation if present
+	[ -f "README.md" ] && install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
 
 }
 
@@ -160,19 +160,16 @@ post_install() {
 		return 0
 	fi
 
-	if [ -n "$user" ]; then
-		log "Aplicando configuracoes para $user"
-		/usr/local/bin/voidbr-copy-skel-inc --user "$user" --force --quiet || true
-	fi
-
 	if [ -z "${VOIDBR_INSTALLER:-}" ]; then
+		if [ -n "$user" ]; then
+			log "Aplicando configuracoes para $user"
+			/usr/local/bin/voidbr-copy-skel-inc --user "$user" --force --quiet || true
+		fi
+
 		log "Ativando serviços"
-		/usr/local/bin/vservice add dbus --quiet || true
-   #/usr/local/bin/vservice add elogind --quiet || true
 		/usr/local/bin/vservice add greetd --quiet || true
 	fi
 
-	log "Finalizando instalação"
 	log "${YELLOW}Instalação completa. Reinicie o sistema...${RESET}"
 }
 
