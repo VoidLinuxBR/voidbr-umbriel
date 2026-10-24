@@ -30,8 +30,9 @@ depends=(
 	# --- Infraestrutura Wayland ---
 	qt5-wayland
 	qt6-wayland
-	adwaita-qt
-	adwaita-qt6
+	qt5ct
+	qt6ct
+	adw-gtk-theme
 	xorg-server-xwayland
 	xhost
 	wl-clipboard
