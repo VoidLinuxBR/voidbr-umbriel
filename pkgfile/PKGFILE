@@ -68,6 +68,8 @@ depends=(
 	intel-media-driver
 	libva-intel-driver
 	vulkan-loader
+	mesa-vulkan-intel
+	mesa-vulkan-radeon
 	gvfs
 	gvfs-afc
 	gvfs-mtp
