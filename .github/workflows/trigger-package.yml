@@ -17,17 +17,38 @@ jobs:
 
     steps:
       - name: Disparar build remoto
+        # dados do evento vao por env (nunca direto no script) para que aspas
+        # ou $() na mensagem do commit nao quebrem nem executem nada
+        env:
+          GH_TOKEN: ${{ secrets.ORGANIZATION_TOKEN }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          REF: ${{ github.ref_name }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
-          echo "Repo atual completo: ${{ github.repository }}"
+          echo "Repo atual completo: $REPO"
 
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.ORGANIZATION_TOKEN }}" \
+          # so a primeira linha da mensagem do commit
+          payload=$(jq -n \
+            --arg repo "$REPO" \
+            --arg actor "$ACTOR" \
+            --arg sha "$SHA" \
+            --arg ref "$REF" \
+            --arg msg "${COMMIT_MSG%%$'\n'*}" \
+            '{
+              event_type: "create-package \($repo)",
+              client_payload: {
+                repository: $repo,
+                triggered_by: $actor,
+                sha: $sha,
+                ref: $ref,
+                commit_message: $msg
+              }
+            }')
+
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/voidlinuxbr/voidbr-build-package/dispatches \
-            -d "{
-              \"event_type\": \"create-package ${{ github.repository }}\",
-              \"client_payload\": {
-                \"repository\": \"${{ github.repository }}\",
-                \"triggered_by\": \"${{ github.actor }}\"
-              }
-            }"
+            -d "$payload"
