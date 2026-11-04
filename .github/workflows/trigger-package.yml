@@ -27,6 +27,7 @@ jobs:
             -d "{
               \"event_type\": \"create-package ${{ github.repository }}\",
               \"client_payload\": {
-                \"repository\": \"${{ github.repository }}\"
+                \"repository\": \"${{ github.repository }}\",
+                \"triggered_by\": \"${{ github.actor }}\"
               }
             }"
